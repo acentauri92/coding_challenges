@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "unistd.h": "c",
+        "wc.h": "c",
+        "stdio.h": "c",
+        "stdlib.h": "c",
+        "errno.h": "c"
+    },
+    "cmake.configureOnOpen": false
+}
