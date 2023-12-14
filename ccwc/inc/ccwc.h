@@ -6,5 +6,6 @@
 
 int countBytes(char* file);
 int countLines(char* file);
+int countWords(char* file);
 
 #endif // WC_H

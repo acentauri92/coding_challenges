@@ -4,7 +4,8 @@
         "wc.h": "c",
         "stdio.h": "c",
         "stdlib.h": "c",
-        "errno.h": "c"
+        "errno.h": "c",
+        "ccwc.h": "c"
     },
     "cmake.configureOnOpen": false
 }
