@@ -3,6 +3,8 @@
 #include <errno.h>
 #include <stdbool.h>
 #include <ctype.h>
+#include <locale.h>
+#include <wchar.h>
 
 extern char* optarg;
 extern int optind;
@@ -10,7 +12,7 @@ extern int optind;
 int main(int argc, char* argv[]){
     int options;
     char* file;
-    while( (options = getopt(argc, argv, "c:l:w:")) != -1){
+    while( (options = getopt(argc, argv, "c:l:w:m:")) != -1){
         file = optarg;
         switch(options){
             case 'c':
@@ -22,12 +24,15 @@ int main(int argc, char* argv[]){
                 fprintf(stdout, "%d %s\n", countLines(file), file);
                 break;
             case 'w':
-             //Count lines in file
+             //Count words in file
                 fprintf(stdout, "%d %s\n", countWords(file), file);
+                break;
+            case 'm':
+             //Count chars in file
+                fprintf(stdout, "%d %s\n", countChars(file), file);
                 break;
             default:
                 fprintf(stdout, "Usage: %s [ -c|l|w ] [file]\n", argv[0]);
-                exit(EXIT_FAILURE);
         }
     }
     if(1 == optind){
@@ -52,6 +57,24 @@ int countBytes(char* file){
     }
     fclose(pFile);
     return byteCount;
+}
+
+int countChars(char* file){
+    setlocale(LC_ALL, "");
+
+    wchar_t character;
+    int charCount = 0;
+    FILE* pFile = fopen(file, "r");
+ 
+    if (pFile == NULL){
+        perror("ERROR: Cannot open file");
+        exit(EXIT_FAILURE);
+    }
+    while((character = fgetwc(pFile)) != WEOF){
+        charCount++;
+    }
+    fclose(pFile);
+    return charCount;
 }
 
 int countLines(char* file){
