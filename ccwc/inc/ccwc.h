@@ -4,9 +4,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int countBytes(char* file);
-int countLines(char* file);
-int countWords(char* file);
-int countChars(char* file);
+int countBytes(void);
+int countLines(void);
+int countWords(void);
+int countChars(void);
+
+FILE* openFile(char* filename);
 
 #endif // WC_H

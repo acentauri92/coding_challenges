@@ -9,27 +9,30 @@
 extern char* optarg;
 extern int optind;
 
+FILE* pFile = NULL;
+
 int main(int argc, char* argv[]){
     int options;
     char* file;
     while( (options = getopt(argc, argv, "c:l:w:m:")) != -1){
         file = optarg;
+        pFile = openFile(file);
         switch(options){
             case 'c':
             //Count bytes in file
-                fprintf(stdout, "%d %s\n", countBytes(file), file);             
+                fprintf(stdout, "%d %s\n", countBytes(), file);             
                 break;
             case 'l':
              //Count lines in file
-                fprintf(stdout, "%d %s\n", countLines(file), file);
+                fprintf(stdout, "%d %s\n", countLines(), file);
                 break;
             case 'w':
              //Count words in file
-                fprintf(stdout, "%d %s\n", countWords(file), file);
+                fprintf(stdout, "%d %s\n", countWords(), file);
                 break;
             case 'm':
              //Count chars in file
-                fprintf(stdout, "%d %s\n", countChars(file), file);
+                fprintf(stdout, "%d %s\n", countChars(), file);
                 break;
             default:
                 fprintf(stdout, "Usage: %s [ -c|l|w ] [file]\n", argv[0]);
@@ -40,69 +43,45 @@ int main(int argc, char* argv[]){
         fprintf(stdout, "Usage: %s [ -c|l|w ] [file]\n", argv[0]);
         exit(EXIT_FAILURE);
     }
+    fclose(pFile);
     exit(EXIT_SUCCESS);
 }
 
-int countBytes(char* file){
+int countBytes(void){
 
     int character, byteCount = 0;
-    FILE* pFile = fopen(file, "r");
- 
-    if (pFile == NULL){
-        perror("ERROR: Cannot open file");
-        exit(EXIT_FAILURE);
-    }
     while((character = fgetc(pFile)) != EOF){
         byteCount++;
     }
-    fclose(pFile);
     return byteCount;
 }
 
-int countChars(char* file){
+int countChars(void){
     setlocale(LC_ALL, "");
 
     wchar_t character;
     int charCount = 0;
-    FILE* pFile = fopen(file, "r");
- 
-    if (pFile == NULL){
-        perror("ERROR: Cannot open file");
-        exit(EXIT_FAILURE);
-    }
+
     while((character = fgetwc(pFile)) != WEOF){
         charCount++;
     }
-    fclose(pFile);
     return charCount;
 }
 
-int countLines(char* file){
+int countLines(void){
     int character, lineCount = 0;
-    FILE* pFile = fopen(file, "r");
-    if(pFile == NULL){
-        perror("ERROR: Cannot open file");
-        exit(EXIT_FAILURE);
-    }
-
     while( (character = fgetc(pFile)) != EOF){
         if(character == '\n')
             lineCount++;
     }
-    fclose(pFile);
     return lineCount;
 
 }
 
-int countWords(char* file){
+int countWords(void){
     int character, wordCount = 0;
     int inWord = false;
 
-    FILE* pFile = fopen(file, "r");
-    if(pFile == NULL){
-        perror("ERROR: Cannot open file");
-        exit(EXIT_FAILURE);
-    }
     while( (character = fgetc(pFile)) != EOF){
 
         if(!isspace(character)){
@@ -110,12 +89,21 @@ int countWords(char* file){
                 inWord = true;
                 wordCount++;
             }
-        }   
-                   
-        else{
+        }                      
+        else {
             inWord = false;
         }
     }
-
     return wordCount;
 }
+
+FILE* openFile(char* filename){
+    pFile = fopen(filename, "r");
+ 
+    if (pFile == NULL){
+        perror("ERROR: Cannot open file");
+        exit(EXIT_FAILURE);
+    }
+    return pFile;
+}
+
