@@ -8,8 +8,8 @@
             "name": "C Debug",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/ccwc/build/ccwc", // Update with your executable name
-            "args": ["-w ${workspaceFolder}/ccwc/test.txt"],
+            "program": "${workspaceFolder}/ntp/build/ntp", // Update with your executable name
+            "args": [],
             "stopAtEntry": true,
             "cwd": "${workspaceFolder}",
             "environment": [],
