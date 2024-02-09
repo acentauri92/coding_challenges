@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include "ntp.h"
 #include <sys/time.h>
+#include <arpa/inet.h>
+#include <string.h>
+#include <sys/socket.h>
 
 ntpHeader_t ntpHeader;
 
@@ -11,6 +14,10 @@ static void ntp_to_timeval(struct timeval* tv, ntpTimeFormat_t* ntptimeformat);
 
 int main(void){
 
+    int sockfd;
+
+
+    memset(&ntpHeader, 0, sizeof(ntpHeader_t));
 
     gettimeofday(&time, NULL);
 
@@ -23,6 +30,9 @@ int main(void){
     ntpHeader.li_vn_mode |= NTP_CLIENT << NTP_MODE_BIT_POSITION;
 
     timevalToNtp(&time, &(ntpHeader.origTimestamp));
+
+    ntpHeader.origTimestamp.seconds = htonl(ntpHeader.origTimestamp.seconds);
+    ntpHeader.origTimestamp.fraction = htonl(ntpHeader.origTimestamp.fraction);
 
     printf("ntp time format(s): %u\n", ntpHeader.origTimestamp.seconds);
     printf("ntp time format(ns): %u\n", ntpHeader.origTimestamp.fraction);
