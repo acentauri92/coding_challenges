@@ -23,6 +23,10 @@ static void test_init_params(void** state){
     assert_int_equal(0, test_input.listen_mode);
     assert_int_equal(0, test_input.port);
     assert_int_equal(CCNC_TCP_SERVER, test_input.connection_mode);
+    assert_int_equal(0, test_input.scan_mode);
+    assert_int_equal(0, test_input.hex_dump_mode);
+    assert_int_equal(0, test_input.process_mode);
+    assert_string_equal(test_input.process, "");
 }
 
 static void test_parse_args_pass(void** state){
@@ -61,6 +65,28 @@ static void test_parse_args_invalid_port_range(void** state){
 
 }
 
+static void test_parse_args_port_test(void** state){
+    char* test_argv[] = {"parse_args.c", "-z"};
+    int status = parse_args(test_argc, test_argv, &test_input);
+    assert_int_equal(CCNC_SUCCESS, status);
+    assert_int_equal(CCNC_PORT_TEST_MODE, test_input.scan_mode);
+}
+
+static void test_parse_args_hex(void** state){
+    char* test_argv[] = {"parse_args.c", "-x"};
+    int status = parse_args(test_argc, test_argv, &test_input);
+    assert_int_equal(CCNC_SUCCESS, status);
+    assert_int_equal(CCNC_HEX_DUMP_MODE, test_input.hex_dump_mode);
+}
+
+static void test_parse_process_mode(void** state){
+    char* test_argv[] = {"parse_args.c", "-e", "/bin/bash"};
+    int status = parse_args(test_argc, test_argv, &test_input);
+    assert_int_equal(CCNC_SUCCESS, status);
+    assert_int_equal(CCNC_PROCESS_MODE, test_input.process_mode);
+    assert_string_equal("/bin/bash", test_input.process);
+}
+
 int main(void) {
     const struct CMUnitTest tests[] = {
         cmocka_unit_test(test_init_params),
@@ -71,7 +97,13 @@ int main(void) {
         cmocka_unit_test_setup_teardown(test_parse_args_valid_port, \
                                         setup, teardown),
         cmocka_unit_test_setup_teardown(test_parse_args_invalid_port_range, \
-                                        setup, teardown)
+                                        setup, teardown),
+        cmocka_unit_test_setup_teardown(test_parse_args_port_test, \
+                                        setup, teardown),
+        cmocka_unit_test_setup_teardown(test_parse_args_hex, \
+                                        setup, teardown),
+        cmocka_unit_test_setup_teardown(test_parse_process_mode, \
+                                        setup, teardown)                                            
         
     };
     return cmocka_run_group_tests(tests, NULL, NULL);

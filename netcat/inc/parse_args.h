@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdint.h>
 
 #define CCNC_SUCCESS            0
 #define CCNC_FAILURE            -1
@@ -13,11 +14,21 @@
 #define CCNC_TCP_SERVER         10
 #define CCNC_UDP_SERVER         20
 
+#define CCNC_PORT_TEST_MODE     30
+#define CCNC_HEX_DUMP_MODE      40
+#define CCNC_PROCESS_MODE       50
+
+/* TODO: Better name for process mode */
+#define CCNC_PROCESS_NAME_LENGTH_MAX     255
+
 typedef struct{
-    int listen_mode;
-    int port;
-    int connection_mode;
-    int port_test_mode;
+    uint8_t listen_mode;
+    uint16_t port;
+    uint8_t connection_mode;
+    uint8_t scan_mode;
+    uint8_t hex_dump_mode;
+    uint8_t process_mode;
+    char process[CCNC_PROCESS_NAME_LENGTH_MAX];
 }input_params_t;
 
 extern char* optarg;
