@@ -90,10 +90,12 @@ static void test_parse_process_mode(void** state){
 int main(void) {
     const struct CMUnitTest tests[] = {
         cmocka_unit_test(test_init_params),
-        cmocka_unit_test_setup_teardown(test_parse_args_pass, setup, teardown),
+        cmocka_unit_test_setup_teardown(test_parse_args_pass, \
+                                        setup, teardown),
         cmocka_unit_test_setup_teardown(test_parse_args_failure, \
                                         setup, teardown),
-        cmocka_unit_test_setup_teardown(test_parse_args_udp, setup, teardown),
+        cmocka_unit_test_setup_teardown(test_parse_args_udp, \
+                                        setup, teardown),
         cmocka_unit_test_setup_teardown(test_parse_args_valid_port, \
                                         setup, teardown),
         cmocka_unit_test_setup_teardown(test_parse_args_invalid_port_range, \

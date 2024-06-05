@@ -1,6 +1,7 @@
 
 #include "parse_args.h"
 #include "string.h"
+#include <ctype.h>
 
 void init_params(input_params_t* input){
     input->connection_mode = CCNC_TCP_SERVER; /* By default TCP server*/
@@ -11,9 +12,16 @@ void init_params(input_params_t* input){
     memset(input->process, 0, CCNC_PROCESS_NAME_LENGTH_MAX);
 }
 
+void print_usage(void){
+    fprintf(stderr, "usage: ccnc [-l] [-u] [-p source_port]\n");
+}
+
 int parse_args(int argc, char* argv[], input_params_t* params){
     int option;
     init_params(params);
+    
+    /* Disable error messages from getopt. We handle the errors*/
+    opterr = 0;
 
     while( (option = getopt(argc, argv, "lup:zxe:")) != -1 ){
         switch(option){
@@ -32,8 +40,8 @@ int parse_args(int argc, char* argv[], input_params_t* params){
                     break;
                 }
                 else{
-                    fprintf(stderr, "Port %d invalid. Should be in range \
-                            0 - 65535\n", port);
+                    fprintf(stderr, "Port %d invalid. Should be in range " \
+                            "0 - 65535\n", port);
                     return CCNC_FAILURE;
                 }
 
@@ -50,12 +58,28 @@ int parse_args(int argc, char* argv[], input_params_t* params){
                 strncpy(params->process, optarg, strlen(optarg));
                 break;
 
-            default: /* ? */
-                fprintf(stderr, "Usage: ./ccnc: [-l] [-u] [-p port]\n");
+            case '?': /* Error handling*/
+                if (optopt == 'p' || optopt == 'e') 
+                    fprintf(stderr, "Option -%c requires an argument\n", optopt);
+                else if (isprint(optopt))
+                    fprintf(stderr, "Option -%c is not valid\n", optopt);
+                else
+                    fprintf(stderr, "Unknown option character");
+
+                print_usage();
                 return CCNC_FAILURE;
         }
     }
+
+    /* Handle no argument case */
+    if(optind == 1){
+        print_usage();
+        return CCNC_FAILURE;
+    }
+
     return CCNC_SUCCESS;
 }
+
+
 
 

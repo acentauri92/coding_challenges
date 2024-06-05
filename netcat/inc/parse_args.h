@@ -31,7 +31,11 @@ typedef struct{
     char process[CCNC_PROCESS_NAME_LENGTH_MAX];
 }input_params_t;
 
+/* External variables used by getopt*/
 extern char* optarg;
+extern int optind;
+extern int opterr;
+extern int optopt;
 
 void init_params(input_params_t* input);
 int parse_args(int argc, char* argv[], input_params_t* params);
