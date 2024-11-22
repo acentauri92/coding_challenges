@@ -6,7 +6,9 @@ SRC_DIR := src
 INC_DIR := inc
 BUILD_DIR := build
 OBJ_DIR := $(BUILD_DIR)/obj
-NAME := hcomp
+TEST_DIR := test
+
+PROJECT_NAME := hcomp
 
 # Search path for header files
 CFLAGS += -I$(INC_DIR)
@@ -24,15 +26,15 @@ LDFLAGS +=
 COBJECTS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(CSOURCES))
 
 #Default rule:  Build appllication
-.PHONY: all
+.PHONY: all clean test test_clean
 	
-all: $(NAME)
+all: $(PROJECT_NAME)
 
 # Build target app
-.PHONY: $(NAME)
+.PHONY: $(PROJECT_NAME)
 
-$(NAME): $(COBJECTS) | $(BUILD_DIR)
-	$(CC) $(COBJECTS) -o $(BUILD_DIR)/$(NAME) $(LDFLAGS)
+$(PROJECT_NAME): $(COBJECTS) | $(BUILD_DIR)
+	$(CC) $(COBJECTS) -o $(BUILD_DIR)/$(PROJECT_NAME) $(LDFLAGS)
 
 # Rule to build object files
 $(COBJECTS): $(OBJ_DIR)/%.o : $(SRC_DIR)/%.c | $(OBJ_DIR)
@@ -46,6 +48,13 @@ $(BUILD_DIR):
 
 #Remove compiled object files and the executable
 .PHONY: clean
+
+#Run tests
+test:
+	make -C $(TEST_DIR)
+test_clean:
+	make -C $(TEST_DIR) clean
+
 clean:
 	rm -rf $(BUILD_DIR)
 
