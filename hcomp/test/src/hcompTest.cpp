@@ -19,5 +19,5 @@ TEST_GROUP(hcomp)
 
 TEST(hcomp, test)
 {
-  LONGS_EQUAL(0, 0);
+  FAIL("Testing a fail case");
 }
