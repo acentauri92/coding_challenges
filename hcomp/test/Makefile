@@ -12,6 +12,8 @@ CPPUTEST_HOME	:= $(TEST_DIR)/cpputest
 INCLUDE_DIRS	:=  $(PROJECT_DIR)/inc $(CPPUTEST_HOME)/include
 SRC_DIRS	:= $(PROJECT_DIR)/src
 TEST_SRC_DIRS	:= $(TEST_DIR)/src
+# Silence output of cpputest
+TEST_RUNNER_ARGS = -c
 
 #TODO:
 #1. Replace hcomp with variable name from top Makefile
