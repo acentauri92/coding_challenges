@@ -17,7 +17,7 @@ TEST_GROUP(parse_options)
 };
 
 
-TEST(parse_options, test_params_zero)
+TEST(parse_options, test_params_struct_zero)
 {
 
 	int argc =2;
@@ -29,4 +29,27 @@ TEST(parse_options, test_params_zero)
 
 	MEMCMP_EQUAL(expected, input_params.input_file, PATH_MAX);
 	MEMCMP_EQUAL(expected, input_params.output_file, PATH_MAX);
+}
+
+
+TEST(parse_options, test_no_params)
+{
+
+	int argc =1;
+	char** argv = NULL;
+
+	LONGS_EQUAL(-1, parse_options(argc, argv));
+}
+	
+
+TEST(parse_options, test_input)
+{
+
+	int argc = 3;
+	char* argv[] = {"-i", "test"};
+
+	parse_options(argc, argv);
+
+	printf("%s", input_params.input_file);
+	STRCMP_EQUAL("test", input_params.input_file);
 }

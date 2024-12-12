@@ -2,6 +2,10 @@
 #include <getopt.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
+
+
+void print_help(char* program_name);
 
 typedef struct {
 		char input_file[PATH_MAX];
